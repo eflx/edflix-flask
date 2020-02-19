@@ -2,11 +2,11 @@ end = 0
 
 import os
 
-from flask_wtf import FlaskForm as Form
-
 from wtforms import StringField, PasswordField, TextAreaField, HiddenField
 from wtforms.validators import DataRequired, Email, Length
 from wtforms.validators import ValidationError
+
+from .form import Form
 
 class SignupForm(Form):
     first_name = StringField("First name",
