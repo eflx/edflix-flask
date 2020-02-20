@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<div class="panel is-info">
+    <div class="column is-10 is-offset-1">
+        {% if ok %}
+        <p class="title is-5 has-text-success">{{ message }}</p>
+        {% else %}
+        <p class="title is-5 has-text-danger">{{ message }}</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
