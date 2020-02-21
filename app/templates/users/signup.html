@@ -3,10 +3,19 @@
 {% block app_content %}
 
 <div class="panel is-info">
-    <p class="panel-heading" style="font-size: 1em">Sign up as a teacher</p>
+    <p class="panel-heading" style="font-size: 1em">
+        {% if form.role.data == "teacher" %}
+        Sign up as a teacher
+        {% elif form.role.data == "school-admin" %}
+        Sign up as a school administrator
+        {% endif %}
+    </p>
+
     <form action="" method= "post" class="form column is-10 is-offset-1" novalidate>
         <div>{{ form.hidden_tag() }}</div>
+
         <div class="columns is-variable is-1">
+
             <div class="control column is-6">
                 {{ form.first_name.label(class_="label is-small") }}
                 {{ form.first_name(class_="input") }}
@@ -14,6 +23,7 @@
                 <span class="label help has-text-danger">{{ form.first_name.errors[0] }}</span>
                 {% endif %}
             </div>
+
             <div class="control column is-6">
                 {{ form.last_name.label(class_="label is-small") }}
                 {{ form.last_name(class_="input") }}
@@ -22,6 +32,7 @@
                 {% endif %}
             </div>
         </div>
+
         <div class="columns is-variable is-1">
             <div class="control column is-12">
                 {{ form.email.label(class_="label is-small") }}
@@ -31,8 +42,9 @@
                 {% endif %}
             </div>
         </div>
+
         <div class="columns is-variable is-1">
-            <div class="control column is-12">
+            <div class="control column is-6">
                 {{ form.password.label(class_="label is-small") }}
                 {{ form.password(class_="input") }}
                 {% if form.password.errors %}
@@ -40,12 +52,38 @@
                 {% endif %}
             </div>
         </div>
+
+        {% if form.role.data == "teacher" %}
         <div class="columns is-variable is-1">
             <div class="control column is-12">
                 {{ form.subjects.label(class_="label is-small") }}
                 {{ form.subjects(class_="textarea", rows=3) }}
             </div>
         </div>
+        {% endif %}
+
+        {% if form.role.data == "school-admin" %}
+        <div class="columns is-variable is-1">
+            <div class="control column is-12">
+                {{ form.school_name.label(class_="label is-small") }}
+                {{ form.school_name(class_="input") }}
+                {% if form.school_name.errors %}
+                <span class="label help has-text-danger">{{ form.school_name.errors[0] }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="columns is-variable is-1">
+            <div class="control column is-12">
+                {{ form.school_address.label(class_="label is-small") }}
+                {{ form.school_address(class_="textarea", rows=3) }}
+                {% if form.school_address.errors %}
+                <span class="label help has-text-danger">{{ form.school_address.errors[0] }}</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+
         <input class="button is-info is-small" type="submit" value="Sign up">
     </form>
 </div>

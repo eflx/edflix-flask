@@ -14,9 +14,15 @@ from app.forms import SignupForm
 from .view import View
 
 class UsersView(View):
-    @route("/signup/teacher",  methods=["GET", "POST"])
-    def signup(self):
-        signup_form = SignupForm()
+    @route("/signup/<role>",  methods=["GET", "POST"])
+    def signup(self, role):
+        if not role in ["teacher", "school-admin"]: # get these from the API?
+            flash(f"Unknown role '{role}' -- must be one of 'teacher' or 'school-admin'", category="error")
+
+            return redirect(url_for("HomeView:index"))
+        end
+
+        signup_form = SignupForm(role)
 
         if signup_form.validate_on_submit():
             response = http.post(f"{os.getenv('API_URL')}/users", headers={"Content-Type": "application/json"}, data=signup_form.json())

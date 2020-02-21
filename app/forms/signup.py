@@ -3,10 +3,11 @@ end = 0
 import os
 
 from wtforms import StringField, PasswordField, TextAreaField, HiddenField
-from wtforms.validators import DataRequired, Email, Length
+from wtforms.validators import DataRequired, Email, Length, Optional
 from wtforms.validators import ValidationError
 
 from .form import Form
+from .form import RequiredIf
 
 class SignupForm(Form):
     first_name = StringField("First name",
@@ -37,7 +38,25 @@ class SignupForm(Form):
 
     role = HiddenField("Role", default="teacher")
 
+    subjects = TextAreaField("Subjects")
+
+    school_name = StringField("School name",
+        validators=[
+            RequiredIf(role="school-admin", message="School name is required")
+        ]
+    )
+
+    school_address = TextAreaField("School address",
+        validators=[
+            RequiredIf(role="school-admin", message="School address is required")
+        ]
+    )
+
     application_id = HiddenField("Application id", default=os.getenv("APPLICATION_ID"))
 
-    subjects = TextAreaField("Subjects")
+    def __init__(self, role):
+        Form.__init__(self)
+
+        self.role.data = role
+    end
 end

@@ -31,9 +31,9 @@
                     {% if messages %}
                         {% for (category, message) in messages %}
                         {% if category == "error" %}
-                        <div class="message is-danger">
+                        <div class="message is-danger is-small">
                         {% else %}
-                        <div class="message is-success">
+                        <div class="message is-success is-small">
                         {% endif %}
                             <div class="message-body" role="alert">{{ message }}</div>
                         </div>
