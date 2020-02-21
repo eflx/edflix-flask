@@ -6,10 +6,12 @@ import requests as http
 
 from flask import url_for, redirect
 from flask import render_template, flash
+from flask import session
 
 from flask_classful import route
 
 from app.forms import SignupForm
+from app.forms import LoginForm
 
 from .view import View
 
@@ -53,5 +55,43 @@ class UsersView(View):
         end
 
         return render_template("users/verify.html", message=message, ok=response.ok)
+    end
+
+    @route("/login", methods=["GET", "POST"])
+    def login(self):
+        if "token" in session:
+            return redirect(url_for("HomeView:index"))
+        end
+
+        login_form = LoginForm()
+
+        if login_form.validate_on_submit():
+            response = http.post(f"{os.getenv('API_URL')}/auth/token", headers={"Content-Type": "application/json"}, data=login_form.json())
+
+            if response.ok:
+                session["token"] = response.json()["token"]
+            else:
+                flash(response.json()["message"], category="error")
+            end
+
+            return redirect(url_for("HomeView:index"))
+
+            # if not user.verified:
+            #     flash("Please verify your email before logging in", category="error")
+
+            #     return redirect(url_for("UsersView:login"))
+            # end
+
+            # login_user(user, remember=login_form.remember_me.data)
+
+            # next_page = request.args.get("next")
+            # if not next_page or url_parse(next_page).netloc != "":
+            #     next_page = url_for("RegistrationsView:index")
+            # end
+
+            # return redirect(next_page)
+        end
+
+        return render_template("users/login.html", form=login_form)
     end
 end

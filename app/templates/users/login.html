@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+
+<div class="panel is-info form-container">
+    <p class="panel-heading" style="font-size: 1em">Login</p>
+    <form action="" method= "post" class="form column is-10 is-offset-1" novalidate>
+        <div>{{ form.hidden_tag() }}</div>
+
+        <div class="columns is-variable is-1">
+            <div class="control column is-12">
+                {{ form.email.label(class_="label is-small") }}
+                {{ form.email(class_="input") }}
+                {% if form.email.errors %}
+                <span class="label help has-text-danger">{{ form.email.errors[0] }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="columns is-variable is-1">
+            <div class="control column is-12">
+                {{ form.password.label(class_="label is-small") }}
+                {{ form.password(class_="input") }}
+                {% if form.password.errors %}
+                <span class="label help has-text-danger">{{ form.password.errors[0] }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="columns is-variable is-1">
+            <div class="control column is-12">
+                {{ form.remember_me(class_="checkbox ") }}
+                {{ form.remember_me.label(class_="label", style="display: inline") }}
+            </div>
+        </div>
+
+        <input class="button is-info is-small" type="submit" value="Login">
+    </form>
+</div>
+
+{% endblock %}
