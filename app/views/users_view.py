@@ -82,7 +82,8 @@ class UsersView(View):
             if not response.ok:
                 flash(response.json()["message"], category="error")
 
-                return redirect(url_for("HomeView:index"))
+                # go back to the login page
+                return redirect(url_for("UsersView:login"))
             end
 
             session["token"] = token = response.json()["token"]
