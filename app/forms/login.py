@@ -1,6 +1,6 @@
 end = 0
 
-from flask_wtf import FlaskForm as Form
+from .form import Form
 
 from wtforms import StringField, PasswordField, BooleanField
 from wtforms.validators import DataRequired, Email, Length

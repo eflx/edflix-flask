@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>EdFlix</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+        <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>-->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    </head>
+    <body>
+        {% block navbar %}
+        <nav class="navbar is-dark">
+            <div class="navbar-brand">
+                {% if current_user.is_anonymous %}
+                    <div class="navbar-item">
+                        <a href="{{ url_for('UsersView:login') }}" class="button is-link is-small">Login</a>
+                    </div>
+                    <!--
+                    <div class="navbar-item">
+                        <a href="{{ url_for('UsersView:signup', role='teacher') }}" class="button is-link is-small is-light">Signup as a teacher</a>
+                    </div>
+                    <div class="navbar-item">
+                        <a href="{{ url_for('UsersView:signup', role='school-admin') }}" class="button is-link is-small is-light">Signup as a teacher</a>
+                    </div>
+                    -->
+                {% else %}
+                    <div class="navbar-item">
+                        <span class="title is-6 has-text-light">{{ current_user.name }}</span>
+                    </div>
+                    <div class="navbar-item">
+                        <a href="{{ url_for('UsersView:logout') }}" class="button is-warning is-small">Logout</a>
+                    </div>
+                {% endif %}
+
+                <a class="navbar-burger burger">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+        </nav>
+        {% endblock %}
+
+        <div id="messages" class="column is-12">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for (category, message) in messages %}
+                    {% if category == "error" %}
+                    <div class="message is-danger is-small">
+                    {% else %}
+                    <div class="message is-success is-small">
+                    {% endif %}
+                        <div class="message-body" role="alert">{{ message }}</div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+        <div class="container">
+            {% block content %}
+            <div id="content" class="column is-8 is-offset-2">
+                {% block app_content %}
+                {% endblock %}
+            </div>
+            {% endblock %}
+        </div>
+    </body>
+</html>

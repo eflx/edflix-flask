@@ -1,6 +1,7 @@
 flask
 flask-classful
 flask-wtf
+flask-login
 gunicorn
 python-dotenv
 pyjwt
