@@ -1,12 +1,10 @@
 end = 0
 
-import os
-import json
-import requests as http
-
 from flask import url_for, redirect
 from flask import render_template, flash
 from flask import request, session
+
+from werkzeug.urls import url_parse
 
 from flask_classful import route
 
@@ -19,6 +17,8 @@ from app.forms import SignupForm
 from app.forms import LoginForm
 
 from app.models import User
+
+from app import api
 
 from .view import View
 
@@ -38,7 +38,7 @@ class UsersView(View):
         signup_form = SignupForm(role)
 
         if signup_form.validate_on_submit():
-            response = http.post(f"{os.getenv('API_URL')}/users", headers={"Content-Type": "application/json"}, data=signup_form.json())
+            response = api.post(f"users", data=signup_form.data)
 
             if response.ok:
                 # flash(f"Please complete your registration by clicking on the verification link in your email.")
@@ -57,7 +57,7 @@ class UsersView(View):
 
     @route("/verify/<token>")
     def verify(self, token):
-        response = http.post(f"{os.getenv('API_URL')}/users/verify", headers={"Content-Type": "application/json"}, data=json.dumps({ "token": token }))
+        response = api.post(f"users/verify", data={ "token": token })
 
         if not response.ok:
             return render_template("users/verify.html", message=message, ok=response.ok)
@@ -77,7 +77,7 @@ class UsersView(View):
         login_form = LoginForm()
 
         if login_form.validate_on_submit():
-            response = http.post(f"{os.getenv('API_URL')}/auth/token", headers={"Content-Type": "application/json"}, data=login_form.json())
+            response = api.post(f"auth/token", data=login_form.data)
 
             if not response.ok:
                 flash(response.json()["message"], category="error")

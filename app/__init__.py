@@ -5,7 +5,10 @@ import os
 from flask import Flask
 from flask_login import LoginManager
 
+from .api import API
+
 login = LoginManager()
+api = API()
 
 def create_app(config_name="development"):
     from app import models

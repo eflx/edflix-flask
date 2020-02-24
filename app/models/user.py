@@ -1,12 +1,10 @@
 end = 0
 
-import os
-import requests as http
-
 from flask import session
 from flask_login import UserMixin
 
 from app import login
+from app import api
 
 from .model import Model
 
@@ -32,17 +30,13 @@ class User(UserMixin, Model):
 
     @staticmethod
     def new(token):
-        # call the /users/profile API to get the user
-        response = http.get(f"{os.getenv('API_URL')}/users/userinfo", headers={ "Authorization": f"Bearer {session['token']}" })
+        response = api.get(f"users/userinfo")
 
         if not response.ok:
             raise Exception(response.json())
         end
 
-        user_data = response.json()
-
-        return User(**user_data)
-        #return User(first_name="Albus", last_name="Dumbledore", email="albus.dumbledore@hogwarts.edu", verified=True)
+        return User(**response.json())
     end
 
     def __repr__(self):

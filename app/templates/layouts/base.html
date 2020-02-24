@@ -16,14 +16,6 @@
                     <div class="navbar-item">
                         <a href="{{ url_for('UsersView:login') }}" class="button is-link is-small">Login</a>
                     </div>
-                    <!--
-                    <div class="navbar-item">
-                        <a href="{{ url_for('UsersView:signup', role='teacher') }}" class="button is-link is-small is-light">Signup as a teacher</a>
-                    </div>
-                    <div class="navbar-item">
-                        <a href="{{ url_for('UsersView:signup', role='school-admin') }}" class="button is-link is-small is-light">Signup as a teacher</a>
-                    </div>
-                    -->
                 {% else %}
                     <div class="navbar-item">
                         <span class="title is-6 has-text-light">{{ current_user.name }}</span>
@@ -47,9 +39,9 @@
                 {% if messages %}
                     {% for (category, message) in messages %}
                     {% if category == "error" %}
-                    <div class="message is-danger is-small">
+                    <div class="message is-danger">
                     {% else %}
-                    <div class="message is-success is-small">
+                    <div class="message is-success">
                     {% endif %}
                         <div class="message-body" role="alert">{{ message }}</div>
                     </div>
