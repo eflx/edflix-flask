@@ -83,7 +83,7 @@ class UsersView(View):
                 flash(response.json()["message"], category="error")
 
                 # go back to the login page
-                return redirect(url_for("UsersView:login"))
+                return render_template("users/login.html", form=login_form)
             end
 
             session["token"] = token = response.json()["token"]
