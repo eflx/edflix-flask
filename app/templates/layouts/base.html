@@ -18,7 +18,7 @@
                     </div>
                 {% else %}
                     <div class="navbar-item">
-                        <span class="title is-6 has-text-light">{{ current_user.name }}</span>
+                        <span class="subtitle is-6 has-text-light">{{ current_user.first_name }}</span>
                     </div>
                     <div class="navbar-item">
                         <a href="{{ url_for('UsersView:logout') }}" class="button is-warning is-small">Logout</a>
