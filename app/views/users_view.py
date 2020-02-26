@@ -44,16 +44,13 @@ class UsersView(View):
 
             if response.ok:
                 send_verification_email(response.data["email"], response.data["token"])
-                # flash(f"Please complete your registration by clicking on the verification link in your email.")
-                #token = response.json()["token"]
 
-                #flash(f"Please click {url_for('UsersView:verify', token=token, _external=True)} to verify your account")
-                flash(f"Please complete your registration by clicking on the verification link in your email {response.data['email']}.")
-            else:
-                flash(response.json()["message"], category="error")
+                flash(f"Please complete your registration by clicking on the verification link in your email")
+
+                return redirect(url_for("UsersView:login"))
             end
 
-            return redirect(url_for("UsersView:login"))
+            flash(response.data["message"], category="error")
         end
 
         return render_template("users/signup.html", form=signup_form)
@@ -67,7 +64,7 @@ class UsersView(View):
             return render_template("users/verify.html", message=message, ok=response.ok)
         end
 
-        flash(f"User {response.json()['email']} verified successfully")
+        flash(f"User {response.data['email']} verified successfully")
 
         return redirect(url_for("UsersView:login"))
     end
@@ -84,13 +81,13 @@ class UsersView(View):
             response = api.post(f"auth/token", data=login_form.data)
 
             if not response.ok:
-                flash(response.json()["message"], category="error")
+                flash(response.data["message"], category="error")
 
                 # go back to the login page
                 return render_template("users/login.html", form=login_form)
             end
 
-            session["token"] = token = response.json()["token"]
+            session["token"] = token = response.data["token"]
 
             user = User.new(token)
 

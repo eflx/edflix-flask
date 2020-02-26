@@ -1,7 +1,7 @@
-Hello {{ user.email }},
+Hello {{email}},
 
 To confirm your email, paste the following link into your browser's address bar:
 
-{{ url_for('UsersView:verify_user', token=token, _external=True) }}
+{{ url_for('UsersView:verify', token=token, _external=True) }}
 
-S.E.T School
+EF Admin

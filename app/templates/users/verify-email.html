@@ -1,8 +1,8 @@
-<p>Hello {{ user.email }},</p>
+<p>Hello {{email }},</p>
 <p>
-    To confirm your email, click <a href="{{ url_for('UsersView:verify_user', token=token, _external=True) }}">here</a>.
+    To confirm your email, click <a href="{{ url_for('UsersView:verify', token=token, _external=True) }}">here</a>.
 </p>
 <p>You can also paste the following link in your browser's address bar:</p>
-<p>{{ url_for('UsersView:verify_user', token=token, _external=True) }}</p>
+<p>{{ url_for('UsersView:verify', token=token, _external=True) }}</p>
 <p></p>
-<p>S.E.T School</p>
+<p>EF Admin</p>
