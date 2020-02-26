@@ -4,10 +4,12 @@ import os
 
 from flask import Flask
 from flask_login import LoginManager
+from flask_mail import Mail
 
 from .api import API
 
 login = LoginManager()
+mail = Mail()
 api = API()
 
 def create_app(config_name="development"):
@@ -26,6 +28,8 @@ end
 def initialize_extensions(app):
     login.init_app(app)
     login.login_view = "UsersView:login"
+
+    mail.init_app(app)
 end
 
 def initialize_views(app):

@@ -36,6 +36,8 @@ class API:
 
         response = op(f"{self.api_root}/{uri}", headers=all_headers, data=json.dumps(data) if data is not None else None)
 
+        setattr(response, "data", response.json())
+
         return response
     end
 

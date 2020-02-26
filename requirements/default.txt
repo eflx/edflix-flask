@@ -2,6 +2,7 @@ flask
 flask-classful
 flask-wtf
 flask-login
+flask-mail
 gunicorn
 python-dotenv
 pyjwt
