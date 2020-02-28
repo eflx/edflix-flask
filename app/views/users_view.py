@@ -16,7 +16,7 @@ from flask_login import current_user
 from app.forms import SignupForm
 from app.forms import LoginForm
 
-from app.tasks import send_verification_email
+from app.lib import tasks
 
 from app.models import User
 
@@ -43,7 +43,7 @@ class UsersView(View):
             response = api.post(f"users", data=signup_form.data)
 
             if response.ok:
-                send_verification_email(response.data["email"], response.data["token"])
+                tasks.send_verification_email(response.data["email"], response.data["token"])
 
                 flash(f"Please complete your registration by clicking on the verification link in your email")
 

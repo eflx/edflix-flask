@@ -21,14 +21,14 @@ def send_email(email, subject, text_body, html_body):
     end
 end
 
-def send_verification_email(email, token):
-    text_body = render_template("users/verify-email.txt", email=email, token=token)
-    html_body = render_template("users/verify-email.html", email=email, token=token)
+def send_verification_email(email, verification_token):
+    text_body = render_template("users/verify-email.txt", email=email, token=verification_token)
+    html_body = render_template("users/verify-email.html", email=email, token=verification_token)
 
     send_email(email, "[eflx] Verify your email", text_body, html_body)
 end
 
 def send_password_reset_email(user):
-    # send_email(user, "[setschoolmw] Reset your password", "users/reset-password-email.txt", "users/reset-password-email.html")
+    # send_email(user, "[eflx] Reset your password", "users/reset-password-email.txt", "users/reset-password-email.html")
     pass
 end
