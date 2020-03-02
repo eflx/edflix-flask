@@ -64,6 +64,8 @@ class UsersView(View):
             return render_template("users/verify.html", message=message, ok=response.ok)
         end
 
+        tasks.send_verification_confirmation_email(response.data["email"])
+
         flash(f"User {response.data['email']} verified successfully")
 
         return redirect(url_for("UsersView:login"))

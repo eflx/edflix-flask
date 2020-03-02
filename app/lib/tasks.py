@@ -28,6 +28,13 @@ def send_verification_email(email, verification_token):
     send_email(email, "[eflx] Verify your email", text_body, html_body)
 end
 
+def send_verification_confirmation_email(email):
+    text_body = render_template("users/verified-email.txt", email=email)
+    html_body = render_template("users/verified-email.html", email=email)
+
+    send_email(email, "[eflx] Email verified", text_body, html_body)
+end
+
 def send_password_reset_email(user):
     # send_email(user, "[eflx] Reset your password", "users/reset-password-email.txt", "users/reset-password-email.html")
     pass

@@ -1,0 +1,5 @@
+Hello {{email}},
+
+Your email has been verified. You can now login to your account by visiting {{ url_for('UsersView:login', _external=True) }}.
+
+EF Admin
