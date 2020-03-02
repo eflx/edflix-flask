@@ -2,11 +2,12 @@ end = 0
 
 from .form import Form
 
-from wtforms import StringField, PasswordField, BooleanField
+from wtforms import PasswordField, BooleanField
+from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email, Length
 
 class LoginForm(Form):
-    email = StringField("Email",
+    email = EmailField("Email",
         validators=[
             DataRequired(message="Email is required"),
             Email("Email address must be of the form user@host")

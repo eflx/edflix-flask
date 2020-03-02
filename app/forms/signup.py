@@ -3,6 +3,7 @@ end = 0
 import os
 
 from wtforms import StringField, PasswordField, TextAreaField, HiddenField
+from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email, Length, Optional
 from wtforms.validators import ValidationError
 
@@ -22,7 +23,7 @@ class SignupForm(Form):
         ]
     )
 
-    email = StringField("Email",
+    email = EmailField("Email",
         validators=[
             DataRequired(message="Email is required"),
             Email("Email address must be of the form user@host")
