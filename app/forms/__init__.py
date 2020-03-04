@@ -1,2 +1,3 @@
-from .signup import SignupForm
-from .login import LoginForm
+from .form import Form
+
+from .form import RequiredIf

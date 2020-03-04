@@ -7,8 +7,8 @@ from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired, Email, Length, Optional
 from wtforms.validators import ValidationError
 
-from .form import Form
-from .form import RequiredIf
+from app.forms import Form
+from app.forms import RequiredIf
 
 class SignupForm(Form):
     first_name = StringField("First name",

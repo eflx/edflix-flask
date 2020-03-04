@@ -13,8 +13,9 @@ from flask_login import logout_user
 from flask_login import login_required
 from flask_login import current_user
 
-from app.forms import SignupForm
-from app.forms import LoginForm
+from app.forms.users import SignupForm
+from app.forms.users import LoginForm
+from app.forms.users import ProfileForm
 
 from app.lib import tasks
 
@@ -123,9 +124,31 @@ class UsersView(View):
         return redirect(url_for("HomeView:index"))
     end
 
-    @route("/profile", methods=["GET"])
+    @route("/profile", methods=["GET", "POST"])
     @login_required
     def profile(self):
+        profile_form = ProfileForm()
+
+        if request.method == "GET":
+            profile_form.first_name.data = current_user.first_name
+            profile_form.last_name.data = current_user.last_name
+            profile_form.email.data = current_user.email
+        end
+
+        if profile_form.validate_on_submit():
+            response = api.put(current_user.url, data=profile_form.data)
+
+            if not response.ok:
+                return redirect(url_for("HomeView:index"))
+            end
+        end
+
+        return render_template("users/profile.html", form=profile_form)
+    end
+
+    @route("/change-password", methods=["GET", "POST"])
+    @login_required
+    def change_password(self):
         pass
     end
 end

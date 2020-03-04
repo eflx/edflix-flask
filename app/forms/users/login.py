@@ -1,6 +1,6 @@
 end = 0
 
-from .form import Form
+from app.forms import Form
 
 from wtforms import PasswordField, BooleanField
 from wtforms.fields.html5 import EmailField
