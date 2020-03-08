@@ -10,6 +10,8 @@ class API:
     def __init__(self):
         self.api_root = os.getenv("API_ROOT")
 
+        self.api_prefix = "/api/v1"
+
         self.operations = {
             "post": requests.post,
             "get": requests.get,
@@ -19,7 +21,20 @@ class API:
         }
     end
 
-    def call(self, method, uri, data=None, headers=None):
+    def make_url(self, endpoint):
+        # if endpoint is a uri itself, i.e., it starts with
+        # the API prefix ("/api/v1" as of now), then remove
+        # the prefix plus the next slash, to give the actual
+        # endpoint
+
+        if endpoint.startswith(self.api_prefix):
+            endpoint = endpoint[len(self.api_prefix + "/"):]
+        end
+
+        return f"{self.api_root}/{endpoint}"
+    end
+
+    def call(self, method, endpoint, data=None, headers=None):
         op = self.operations.get(method) or self.operations["get"]
 
         all_headers = {} if method in ["get", "delete"] else { "Content-Type": "application/json" }
@@ -34,26 +49,26 @@ class API:
             all_headers["Authorization"] = f"Bearer {session['token']}"
         end
 
-        response = op(f"{self.api_root}/{uri}", headers=all_headers, data=json.dumps(data) if data is not None else None)
+        response = op(self.make_url(endpoint), headers=all_headers, data=json.dumps(data) if data is not None else None)
 
         setattr(response, "data", response.json())
 
         return response
     end
 
-    def get(self, uri, **kwargs):
-        return self.call("get", uri, **kwargs)
+    def get(self, endpoint, **kwargs):
+        return self.call("get", endpoint, **kwargs)
     end
 
-    def post(self, uri, data=None):
-        return self.call("post", uri, data)
+    def post(self, endpoint, data=None):
+        return self.call("post", endpoint, data)
     end
 
-    def put(self, uri, data=None):
-        return self.call("put", uri, data)
+    def put(self, endpoint, data=None):
+        return self.call("put", endpoint, data)
     end
 
-    def delete(self, uri, data=None):
-        return self.call("delete", uri, data)
+    def delete(self, endpoint, data=None):
+        return self.call("delete", endpoint, data)
     end
 end

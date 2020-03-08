@@ -16,6 +16,7 @@ from flask_login import current_user
 from app.forms.users import SignupForm
 from app.forms.users import LoginForm
 from app.forms.users import ProfileForm
+from app.forms.users import ChangePasswordForm
 
 from app.lib import tasks
 
@@ -103,12 +104,6 @@ class UsersView(View):
             end
 
             return redirect(next_page)
-
-            # if not user.verified:
-            #     flash("Please verify your email before logging in", category="error")
-
-            #     return redirect(url_for("UsersView:login"))
-            # end
         end
 
         return render_template("users/login.html", form=login_form)
@@ -149,6 +144,22 @@ class UsersView(View):
     @route("/change-password", methods=["GET", "POST"])
     @login_required
     def change_password(self):
-        pass
+        change_password_form = ChangePasswordForm()
+
+        if change_password_form.validate_on_submit():
+            response = api.put(current_user.url, data=change_password_form.data)
+
+            if not response.ok:
+                flash(response.data["message"], category="error")
+
+                return render_template("users/change-password.html", form=change_password_form)
+            end
+
+            flash("Password changed successfully")
+
+            return redirect(url_for("ItemsView:index"))
+        end
+
+        return render_template("users/change-password.html", form=change_password_form)
     end
 end
