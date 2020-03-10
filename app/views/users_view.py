@@ -1,5 +1,7 @@
 end = 0
 
+import os
+
 from flask import url_for, redirect
 from flask import render_template, flash
 from flask import request, session
@@ -45,7 +47,7 @@ class UsersView(View):
             response = api.post(f"users", data=signup_form.data)
 
             if response.ok:
-                tasks.send_verification_email(response.data["email"], response.data["token"])
+                tasks.send_verification_link(response.data["email"], response.data["token"])
 
                 flash(f"Please complete your registration by clicking on the verification link in your email")
 
@@ -60,13 +62,13 @@ class UsersView(View):
 
     @route("/verify/<token>")
     def verify(self, token):
-        response = api.post(f"users/verify", data={ "token": token })
+        response = api.post(f"users/verify", data={ "token": token, "application_id": os.getenv("APPLICATION_ID") })
 
         if not response.ok:
             return render_template("users/verify.html", message=message, ok=response.ok)
         end
 
-        tasks.send_verification_confirmation_email(response.data["email"])
+        tasks.send_verification_confirmation(response.data["email"])
 
         flash(f"User {response.data['email']} verified successfully")
 
@@ -155,6 +157,8 @@ class UsersView(View):
                 return render_template("users/change-password.html", form=change_password_form)
             end
 
+            tasks.send_password_change_notification(current_user.email)
+
             flash("Password changed successfully")
 
             return redirect(url_for("ItemsView:index"))
@@ -164,14 +168,31 @@ class UsersView(View):
     end
 
     @route("/forgot-password", methods=["GET", "POST"])
-    @login_required
     def forgot_password(self):
+        # if there a user is already logged in, just send them back to
+        # the page they came from. you can't access the forgot password
+        # feature when already logged in
+        if current_user.is_authenticated:
+            return redirect(request.referrer)
+        end
+
         forgot_password_form = ForgotPasswordForm()
 
         if forgot_password_form.validate_on_submit():
-            tasks.send_password_reset_email(current_user.email)
+            response = api.post("users/forgot-password", data={
+                "email": forgot_password_form.email.data,
+                "application_id": os.getenv("APPLICATION_ID")
+            })
 
-            flash(f"A password reset link has been sent to { user.email }")
+            if not response.ok:
+                flash(response.data["message"], category="error")
+
+                return redirect(request.referrer)
+            end
+
+            tasks.send_password_reset_link(response.data["email"], response.data["token"])
+
+            flash(f"A password reset link has been sent to { response.data["email"] }")
 
             return redirect(url_for("UsersView:login"))
         end
@@ -180,7 +201,6 @@ class UsersView(View):
     end
 
     @route("/reset-password/<token>", methods=["GET", "POST"])
-    @login_required
     def reset_password(self, token):
         if current_user.is_authenticated:
             return redirect(url_for("ItemsView:index"))
