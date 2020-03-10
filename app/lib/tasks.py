@@ -35,7 +35,9 @@ def send_verification_confirmation_email(email):
     send_email(email, "[eflx] Email verified", text_body, html_body)
 end
 
-def send_password_reset_email(user):
-    # send_email(user, "[eflx] Reset your password", "users/reset-password-email.txt", "users/reset-password-email.html")
-    pass
+def send_password_reset_email(email):
+    text_body = render_template("users/reset-password-email.txt", email=email)
+    html_body = render_template("users/reset-password-email.html", email=email)
+
+    send_email(email, "[eflx] Reset your password", text_body, html_body)
 end

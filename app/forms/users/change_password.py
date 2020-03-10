@@ -3,8 +3,6 @@ end = 0
 from wtforms import PasswordField
 from wtforms.validators import DataRequired, EqualTo, Length
 
-from app.models import User
-
 from app.forms import Form
 
 class ChangePasswordForm(Form):

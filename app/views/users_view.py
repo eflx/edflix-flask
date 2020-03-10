@@ -162,4 +162,46 @@ class UsersView(View):
 
         return render_template("users/change-password.html", form=change_password_form)
     end
+
+    @route("/forgot-password", methods=["GET", "POST"])
+    @login_required
+    def forgot_password(self):
+        forgot_password_form = ForgotPasswordForm()
+
+        if forgot_password_form.validate_on_submit():
+            tasks.send_password_reset_email(current_user.email)
+
+            flash(f"A password reset link has been sent to { user.email }")
+
+            return redirect(url_for("UsersView:login"))
+        end
+
+        return render_template("users/forgot-password.html", form=forgot_password_form)
+    end
+
+    @route("/reset-password/<token>", methods=["GET", "POST"])
+    @login_required
+    def reset_password(self, token):
+        if current_user.is_authenticated:
+            return redirect(url_for("ItemsView:index"))
+        end
+
+        user = User.from_token(token)
+        if not user:
+            return redirect(url_for("HomeView:index"))
+        end
+
+        reset_password_form = ResetPasswordForm()
+        if reset_password_form.validate_on_submit():
+            user.set_password(reset_password_form.password.data)
+            user.save()
+
+            flash(f"Your password was reset and you can login with the new password")
+
+            return redirect(url_for("UsersView:login"))
+        end
+
+        return render_template("users/reset-password.html", form=reset_password_form)
+    end
+
 end
