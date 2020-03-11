@@ -19,6 +19,8 @@ from app.forms.users import SignupForm
 from app.forms.users import LoginForm
 from app.forms.users import ProfileForm
 from app.forms.users import ChangePasswordForm
+from app.forms.users import ForgotPasswordForm
+from app.forms.users import ResetPasswordForm
 
 from app.lib import tasks
 
@@ -169,11 +171,9 @@ class UsersView(View):
 
     @route("/forgot-password", methods=["GET", "POST"])
     def forgot_password(self):
-        # if there a user is already logged in, just send them back to
-        # the page they came from. you can't access the forgot password
-        # feature when already logged in
+        # can't have forgotten password if already logged in
         if current_user.is_authenticated:
-            return redirect(request.referrer)
+            return redirect(url_for("ItemsView:index"))
         end
 
         forgot_password_form = ForgotPasswordForm()
@@ -187,12 +187,12 @@ class UsersView(View):
             if not response.ok:
                 flash(response.data["message"], category="error")
 
-                return redirect(request.referrer)
+                return redirect(url_for("UsersView:login"))
             end
 
             tasks.send_password_reset_link(response.data["email"], response.data["token"])
 
-            flash(f"A password reset link has been sent to { response.data["email"] }")
+            flash(f"A password reset link has been sent to { response.data['email'] }")
 
             return redirect(url_for("UsersView:login"))
         end
@@ -202,26 +202,34 @@ class UsersView(View):
 
     @route("/reset-password/<token>", methods=["GET", "POST"])
     def reset_password(self, token):
+        # can't reset a password if already logged in
         if current_user.is_authenticated:
             return redirect(url_for("ItemsView:index"))
         end
 
-        user = User.from_token(token)
-        if not user:
-            return redirect(url_for("HomeView:index"))
-        end
-
         reset_password_form = ResetPasswordForm()
-        if reset_password_form.validate_on_submit():
-            user.set_password(reset_password_form.password.data)
-            user.save()
 
-            flash(f"Your password was reset and you can login with the new password")
+        if reset_password_form.validate_on_submit():
+            response = api.post("users/reset-password", data={
+                "token": token,
+                "application_id": os.getenv("APPLICATION_ID"),
+                "email": reset_password_form.email.data,
+                "new_password": reset_password_form.new_password.data
+            })
+
+            if not response.ok:
+                flash(response.data["message"], category="error")
+
+                return redirect(url_for("UsersView:login"))
+            end
+
+            tasks.send_password_change_notification(response.data["email"])
+
+            flash(f"Your password was reset successfully. You can now login with the new password")
 
             return redirect(url_for("UsersView:login"))
         end
 
         return render_template("users/reset-password.html", form=reset_password_form)
     end
-
 end

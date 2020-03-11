@@ -21,6 +21,7 @@
             <div class="control column is-12">
                 {{ form.password.label(class_="label is-small") }}
                 {{ form.password(class_="input") }}
+                <a class="help" href="{{ url_for('UsersView:forgot_password') }}">Forgot password?</a>
                 {% if form.password.errors %}
                 <span class="label help has-text-danger">{{ form.password.errors[0] }}</span>
                 {% endif %}

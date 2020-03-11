@@ -14,12 +14,14 @@
             <div class="navbar-brand">
                 {% if current_user.is_anonymous %}
                     <div class="navbar-item">
+                        <a href="{{ url_for('HomeView:index') }}" class="subtitle is-7 has-text-light">Home</a>
+                    </div>
+                    <div class="navbar-item">
                         <a href="{{ url_for('UsersView:login') }}" class="subtitle is-7 has-text-light">Login</a>
                     </div>
                 {% else %}
                     <div class="navbar-item">
                         <a class="button is-info is-small" href="/users/profile">{{ current_user.first_name }}</a>
-                        <!--<span class="subtitle is-6 has-text-light">{{ current_user.first_name }}</span>-->
                     </div>
                     <div class="navbar-item">
                         <a href="{{ url_for('UsersView:logout') }}" class="subtitle is-7 has-text-light">Logout</a>

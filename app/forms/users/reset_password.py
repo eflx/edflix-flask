@@ -1,15 +1,16 @@
 end = 0
 
 from wtforms import PasswordField
-from wtforms.validators import DataRequired, EqualTo, Length
+from wtforms.fields.html5 import EmailField
+from wtforms.validators import DataRequired, EqualTo, Length, Email
 
 from app.forms import Form
 
-class ChangePasswordForm(Form):
-    current_password = PasswordField("Current password",
+class ResetPasswordForm(Form):
+    email = EmailField("Email",
         validators=[
-            DataRequired(message="Current password is required"),
-            Length(8, 20, message="Password must be between 8 and 20 characters long")
+            DataRequired(message="Email is required"),
+            Email(message="Email must be of the form user@host")
         ]
     )
 
