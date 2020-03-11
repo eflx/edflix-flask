@@ -140,6 +140,8 @@ class UsersView(View):
             if not response.ok:
                 return redirect(url_for("HomeView:index"))
             end
+
+            return redirect(url_for("ItemsView:index"))
         end
 
         return render_template("users/profile.html", form=profile_form)

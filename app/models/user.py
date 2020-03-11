@@ -10,7 +10,6 @@ from .model import Model
 
 @login.user_loader
 def load_user(id):
-    print("*** loading user from the API ***")
     return User.new(id)
 end
 
