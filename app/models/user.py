@@ -32,10 +32,10 @@ class User(UserMixin, Model):
         response = api.get(f"users/userinfo")
 
         if not response.ok:
-            raise Exception(response.json())
+            raise Exception(response.data)
         end
 
-        return User(**response.json())
+        return User(**response.data)
     end
 
     def __repr__(self):

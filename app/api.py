@@ -6,6 +6,15 @@ import json
 
 from flask import session
 
+class ApiException(Exception):
+    def __init__(self, error):
+        Exception.__init__(self)
+
+        self.error_code = error["code"]
+        self.error_message = error["message"]
+    end
+end
+
 class API:
     def __init__(self):
         self.api_root = os.getenv("API_ROOT")

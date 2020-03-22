@@ -1,0 +1,25 @@
+{% extends "layouts/base.html" %}
+
+{% block app_content %}
+
+<div class="panel is-info">
+    <p class="panel-heading" style="font-size: 1em">New collection</p>
+    <form action="" method= "post" class="form column is-10 is-offset-1" novalidate>
+        <div>{{ form.hidden_tag() }}</div>
+
+        <div class="columns is-variable is-1">
+            <div class="control column is-12">
+                {{ form.title.label(class_="label is-small") }}
+                {{ form.title(class_="input") }}
+                {% if form.title.errors %}
+                <span class="label help has-text-danger">{{ form.title.errors[0] }}</span>
+                {% endif %}
+            </div>
+        </div>
+
+        <input class="button is-info" type="submit" value="Create">
+        <a class="button is-danger" href="{{ url_for('ItemsView:index') }}">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

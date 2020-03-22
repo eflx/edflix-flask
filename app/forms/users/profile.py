@@ -2,10 +2,9 @@ end = 0
 
 import os
 
-from wtforms import StringField, PasswordField, TextAreaField, HiddenField
+from wtforms import StringField
 from wtforms.fields.html5 import EmailField
-from wtforms.validators import DataRequired, Email, Length, Optional
-from wtforms.validators import ValidationError
+from wtforms.validators import DataRequired
 
 from app.forms import Form
 
