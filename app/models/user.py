@@ -41,4 +41,14 @@ class User(UserMixin, Model):
     def __repr__(self):
         return f"User ({self.email})"
     end
+
+    def get_collections(self):
+        response = api.get(self.collections)
+
+        if not response.ok:
+            raise Exception(response.data)
+        end
+
+        return response.data["collections"]
+    end
 end

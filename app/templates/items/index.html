@@ -2,7 +2,11 @@
 
 {% block app_content %}
 
-<p class="title is-6">Items for {{current_user.name}}</p>
+{% for collection in collections %}
+<div class="box">
+    <p class="title is-4">{{ collection.title }}</p>
+</div>
+{% endfor %}
 
 <a class="button is-info" href="{{ url_for('CollectionsView:new') }}">New collection</a>
 

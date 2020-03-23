@@ -2,6 +2,7 @@ end = 0
 
 from flask import render_template, url_for, redirect
 from flask import flash
+from flask import Markup
 
 from flask_classful import route
 
@@ -24,7 +25,7 @@ class CollectionsView(View):
             try:
                 new_collection = Collection.new(new_collection_form.title.data)
 
-                flash(f"Collection '{new_collection.title}' was created successfully")
+                flash(Markup(f"Collection <b>{new_collection.title}</b> was created successfully"))
 
                 return redirect(url_for("ItemsView:index"))
             except Exception as e:

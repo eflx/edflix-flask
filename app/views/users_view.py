@@ -5,6 +5,7 @@ import os
 from flask import url_for, redirect
 from flask import render_template, flash
 from flask import request, session
+from flask import Markup
 
 from werkzeug.urls import url_parse
 
@@ -38,7 +39,7 @@ class UsersView(View):
         end
 
         if not role in ["teacher", "school-admin"]: # get these from the API?
-            flash(f"Unknown role '{role}' -- must be one of 'teacher' or 'school-admin'", category="error")
+            flash(Markup(f"Unknown role <b>{role}</b> &ndash; must be one of <b>teacher</b> or <b>school-admin</b>"), category="error")
 
             return redirect(url_for("HomeView:index"))
         end
