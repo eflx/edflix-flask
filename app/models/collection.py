@@ -11,6 +11,17 @@ class Collection(Model):
     end
 
     @staticmethod
+    def all():
+        response = api.get("collections")
+
+        if not response.ok:
+            raise ApiException(response.data)
+        end
+
+        return list(map(lambda data: Collection(**data), response.data["collections"]))
+    end
+
+    @staticmethod
     def new(title):
         response = api.post(f"collections", data={
             "title": title
@@ -21,6 +32,29 @@ class Collection(Model):
         end
 
         return Collection(**response.data)
+    end
+
+    @staticmethod
+    def get(id):
+        response = api.get(f"collections/{id}")
+
+        if not response.ok:
+            raise ApiException(response.data)
+        end
+
+        return Collection(**response.data)
+    end
+
+    def save(self):
+        response = api.put(self.url, data={
+            "title": self.title
+        })
+
+        if not response.ok:
+            raise ApiException(response.data)
+        end
+
+        return self
     end
 
     def __repr__(self):

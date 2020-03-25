@@ -1,0 +1,9 @@
+<div class="columns is-variable is-1">
+    <div class="control column is-12">
+        {{ form.title.label(class_="label is-small") }}
+        {{ form.title(class_="input") }}
+        {% if form.title.errors %}
+        <span class="label help has-text-danger">{{ form.title.errors[0] }}</span>
+        {% endif %}
+    </div>
+</div>
