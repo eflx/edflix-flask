@@ -9,6 +9,7 @@ from wtforms.validators import ValidationError
 
 from app.forms import Form
 from app.forms import RequiredIf
+from app.forms import ListField
 
 class SignupForm(Form):
     first_name = StringField("First name",
@@ -39,7 +40,7 @@ class SignupForm(Form):
 
     role = HiddenField("Role", default="teacher")
 
-    subjects = TextAreaField("Subjects")
+    subjects = ListField("Subjects")
 
     school_name = StringField("School name",
         validators=[
