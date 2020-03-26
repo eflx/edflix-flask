@@ -46,7 +46,7 @@ class API:
     def call(self, method, endpoint, data=None, headers=None):
         op = self.operations.get(method) or self.operations["get"]
 
-        all_headers = {} if method in ["get", "delete"] else { "Content-Type": "application/json" }
+        all_headers = {} if method == "get" else { "Content-Type": "application/json" }
 
         if headers:
             for key in headers:
@@ -60,7 +60,7 @@ class API:
 
         response = op(self.make_url(endpoint), headers=all_headers, data=json.dumps(data) if data is not None else None)
 
-        setattr(response, "data", response.json())
+        setattr(response, "data", response.json() if response.text else "")
 
         return response
     end

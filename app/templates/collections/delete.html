@@ -1,0 +1,16 @@
+{% extends "layouts/base.html" %}
+
+{% block app_content %}
+
+<div class="panel is-info">
+    <p class="panel-heading" style="font-size: 1em">Delete collection</p>
+
+    <form action="" method= "post" class="form column is-10 is-offset-1">
+        <p class="title is-6">You are about to delete the collection <strong>{{ collection.title }}</strong>. Are you sure?</p>
+
+        <input type="submit" class="button is-danger" name="yes" value="Yes">
+        <input type="submit" class="button is-success" name="no" value="No">
+    </form>
+</div>
+
+{% endblock %}

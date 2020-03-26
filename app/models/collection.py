@@ -57,6 +57,14 @@ class Collection(Model):
         return self
     end
 
+    def delete(self):
+        response = api.delete(self.url)
+
+        if not response.ok:
+            raise ApiException(response.data)
+        end
+    end
+
     def __repr__(self):
         return f"Collection '{self.title}'"
     end

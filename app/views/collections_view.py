@@ -39,7 +39,7 @@ class CollectionsView(View):
         return render_template("collections/new.html", form=new_collection_form)
     end
 
-    @route("/edit/<id>", methods=["GET", "POST"])
+    @route("/<id>/edit", methods=["GET", "POST"])
     @login_required
     def edit(self, id):
         try:
@@ -71,5 +71,29 @@ class CollectionsView(View):
         end
 
         return render_template("collections/edit.html", form=edit_collection_form)
+    end
+
+    @route("/<id>/delete", methods=["GET", "POST"])
+    @login_required
+    def delete(self, id):
+        try:
+            collection = Collection.get(id)
+        except Exception as e:
+            flash(e.error_message, category="error")
+
+            return redirect(url_for("ItemsView:index"))
+        end
+
+        if request.method == "POST":
+            if "yes" in request.form:
+                collection.delete()
+
+                flash(Markup(f"Collection <b>{collection.title}</b> was deleted"))
+            end
+
+            return redirect(url_for("ItemsView:index"))
+        end
+
+        return render_template("collections/delete.html", collection=collection)
     end
 end

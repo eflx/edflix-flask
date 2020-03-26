@@ -4,7 +4,10 @@
 
 {% for collection in collections %}
 <div class="box">
-    <p class="title is-4"><a href="{{ url_for('CollectionsView:edit', id=collection.id) }}">{{ collection.title }}</a></p>
+    <p class="title is-4">
+        <a href="{{ url_for('CollectionsView:edit', id=collection.id) }}">{{ collection.title }}</a>
+        <a href="{{ url_for('CollectionsView:delete', id=collection.id) }}" class="button is-danger is-small is-pulled-right">Delete</a>
+    </p>
 </div>
 {% endfor %}
 
